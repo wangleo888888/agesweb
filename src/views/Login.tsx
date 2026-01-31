@@ -54,7 +54,14 @@ export const Login = defineComponent({
     // };
 
     return () => (
-      <div class={s.test}>hi</div>
+      <div class={s.test}>
+        hi
+        <div>
+          <p class="text-sky-400">The quick brown fox...</p>
+
+  
+        </div>
+      </div>
       // <form onSubmit={handleSubmit} class="w-full space-y-6">
       //   <div class="space-y-2">
       //     <div class="relative group">
