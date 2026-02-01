@@ -1,8 +1,8 @@
 import { defineComponent, ref } from 'vue'
 import { NButton, NForm, NFormItem, NInput, useMessage, type FormInst, type FormRules } from 'naive-ui'
-import { useConfetti } from '../shared/hooks/useConfetti'
+import { useConfetti } from '../hooks/useConfetti'
 import { Icon } from '../components/Icon'
-import { LockClosedOutline, LogInOutline, PersonOutline } from '@vicons/ionicons5'
+import { LockClosedOutline, LogInOutline } from '@vicons/ionicons5'
 
 export const Login = defineComponent({
   name: 'Login',
@@ -13,14 +13,9 @@ export const Login = defineComponent({
     const loading = ref(false)
     const formRef = ref<FormInst | null>(null)
     const formModel = ref({
-      username: '',
       password: '',
     })
     const rules: FormRules = {
-      username: [
-        { required: true, message: '请输入用户名', trigger: 'blur', },
-        { min: 3, message: '宝子，用户名太短了', trigger: 'blur', },
-      ],
       password: [
         { required: true, message: '请输入密码', trigger: ['input', 'blur',], },
       ],
@@ -50,21 +45,28 @@ export const Login = defineComponent({
 
     return () => (
       <>
-        <div class="max-w-md mx-auto mt-20 p-6 bg-white rounded-xl shadow-lg border border-gray-100">
-          <h2 class="text-2xl font-bold text-center mb-6 text-gray-700">欢迎回来，宝子</h2>
+        {/* Logo 区 */}
+        <div class="mb-12 relative">
+          {/* 那个鸭子图*/}
+          <img src="https://i.ibb.co/tFqdDFn/835bee3e-3488-42d7-bcf0-8f57a9aa0e1c.png" class="w-full h-full object-contain drop-shadow-[4px_4px_0_#000]" alt="SuiSui Logo" />
+          {/* 装饰：手写标题*/}
+          <h1 class="text-4xl font-black mt-4 text-center tracking-widest">岁岁</h1>
+          <p class="text-xs text-center text-gray-500 font-bold mt-1">昭昭如愿，岁岁安澜</p>
+        </div>
+        {/* 表单区 */}
+        <div class="w-full max-w-[430px] space-y-6">
           <NForm ref={formRef} model={formModel.value} rules={rules}>
-            <NFormItem path='username' label='用户名'>
-              <NInput v-model:value={formModel.value.username} placeholder="宝子，输入你的昵称" >
-                {{ prefix: () => <Icon icon={PersonOutline} /> }}
-              </NInput>
-            </NFormItem>
-            <NFormItem path='password' label='密码'>
-              <NInput v-model:value={formModel.value.password} type="password" showPasswordOn='click' placeholder="宝子，密码搞复杂点哦" >
-                {{ prefix: () => <Icon icon={ LockClosedOutline } /> }}
-              </NInput>
-            </NFormItem>
-            <NButton type="primary" block size='large' loading={loading.value} disabled={ loading.value } onClick={onClickLogin}>
-              {{ default: () => '登录', icon: () => <Icon icon={ LogInOutline } /> }}
+            
+            <div class="space-y-2">
+              <NFormItem path='password' label='密码' class="font-bold ml-1">
+                <NInput v-model:value={formModel.value.password} type="password" showPasswordOn='click' placeholder="宝子，密码搞复杂点哦" class="neo-input text-center text-xl tracking-widest">
+                  {{ prefix: () => <Icon icon={LockClosedOutline} /> }}
+                </NInput>
+              </NFormItem>
+            </div>
+            
+            <NButton type="primary" block size='large' loading={loading.value} disabled={ loading.value } onClick={onClickLogin} class="w-full mt-8 neo-btn-primary select-none">
+              {{ default: () => (<>冲鸭 <span class="ml-2">➔</span></>), icon: () => <Icon icon={ LogInOutline } /> }}
             </NButton>
           </NForm>
         </div>
