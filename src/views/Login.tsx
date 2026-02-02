@@ -3,6 +3,8 @@ import { NButton, NForm, NFormItem, NInput, useMessage, type FormInst, type Form
 import { useConfetti } from '../hooks/useConfetti'
 import { Icon } from '../components/Icon'
 import { LockClosedOutline, LogInOutline } from '@vicons/ionicons5'
+import { useRequest } from 'alova/client'
+import { authApi } from '../api/auth'
 
 export const Login = defineComponent({
   name: 'Login',
@@ -10,7 +12,23 @@ export const Login = defineComponent({
     const message = useMessage()
     const { fire } = useConfetti()
 
-    const loading = ref(false)
+    const { loading, send, onSuccess, onError } = useRequest(() => authApi.login(formModel.value.password), { immediate: false }) // ⚠️ 重要：关闭自动发送，要在点击时才发
+    onSuccess((e) => {
+      console.log('登录成功:', e)
+      // 保存 token 到 localStorage
+      try {
+        localStorage.setItem('token', e.token)
+        // 跳转到首页或其它页面
+        message.success('登录成功！')
+      } catch (err) {
+        console.error('保存 token 失败:', err)
+        message.error('登录成功，但保存凭证失败')
+      }
+    })
+    onError(() => {
+      formModel.value.password = ''
+    })
+
     const formRef = ref<FormInst | null>(null)
     const formModel = ref({
       password: '',
@@ -24,14 +42,8 @@ export const Login = defineComponent({
       e.preventDefault()
       formRef.value?.validate(async (err) => {
         if (!err) {
-          loading.value = true
-          try {
-            await new Promise(resolve => setTimeout(resolve, 1000))
-            message.success('校验通过，正在调用 Cloudflare Worker...')
-            fire(e)
-          } finally {
-            loading.value = false
-          }
+          send()
+          fire(e)
         } else {
           message.error('表单填写有误，请检查')
           fire(null, { 
