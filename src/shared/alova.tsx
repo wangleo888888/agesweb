@@ -43,7 +43,7 @@ export const alovaInstance = createAlova({
   // 4. 全局响应拦截器 (Responded)
   responded: {
     // 请求成功 (HTTP 200)
-    onSuccess: async (response, method) => {
+    onSuccess: async (response, _method) => {
       loadingBar.finish()
       const json: ApiResponse = await response.json()
       // 业务逻辑错误处理 (比如 code !== 200)
@@ -56,7 +56,7 @@ export const alovaInstance = createAlova({
       return json.data
     },
     // 请求失败 (HTTP 错误，如 404, 500, 网络断开)
-    onError: (err, method) => {
+    onError: (err, _method) => {
       loadingBar.finish()
 
       let errorMsg = err.message || '网络波动，请稍后重试'

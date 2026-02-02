@@ -17,7 +17,7 @@ export const Login = defineComponent({
       console.log('登录成功:', e)
       // 保存 token 到 localStorage
       try {
-        localStorage.setItem('token', e.token)
+        localStorage.setItem('token', e.data.token)
         // 跳转到首页或其它页面
         message.success('登录成功！')
       } catch (err) {
